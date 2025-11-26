@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Sentiment Analysis Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo">
+    <h1>Customer Sentiment Analysis Application</h1>
+</header>
+
+<div class="container">
+
+    <!-- مربع تحليل جملة -->
+    <div class="box">
+        <h2>Analyze Single Feedback</h2>
+        <p>Enter feedback in Arabic or English. The system translates Arabic automatically.</p>
+
+        <form method="POST">
+            <textarea name="single_feedback" placeholder="اكتب رأيك هنا..."></textarea>
+            <button type="submit">Analyze Single Feedback</button>
+        </form>
+
+        {% if single_result %}
+        <div class="result">
+            <h3>Single Feedback Result</h3>
+
+            <p><strong>Translated Text:</strong> {{ single_result.translated }}</p>
+            <p><strong>Sentiment:</strong> {{ single_result.sentiment }}</p>
+            <p><strong>Polarity Score:</strong> {{ single_result.score }}</p>
+            <p><strong>Sentiment Strength (%):</strong> {{ single_result.percentage }}%</p>
+
+            {% if chart_generated %}
+            <img src="{{ url_for('static', filename='images/single_chart.png') }}" class="chart">
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- مربع تحليل ملف -->
+    <div class="box">
+        <h2>Analyze Excel File</h2>
+        <p>Upload an Excel file (.xlsx) containing customer feedback.</p>
+
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="excel_file" accept=".xlsx">
+            <button type="submit">Analyze File</button>
+        </form>
+
+        <!-- 🔥 هذا هو التعديل المهم -->
+{% if excel_result is not none %}
+<div class="result">
+    <h3>File Analysis Complete</h3>
+
+    <p><strong>Positive:</strong> {{ excel_result.positive }}%</p>
+    <p><strong>Negative:</strong> {{ excel_result.negative }}%</p>
+    <p><strong>Neutral:</strong> {{ excel_result.neutral }}%</p>
+
+    {% if excel_chart %}
+    <img src="{{ url_for('static', filename='images/excel_chart.png') }}" class="chart">
+    {% endif %}
+</div>
+{%endif%}
+
+    </div>
+
+</div>
+
+</body>
+</html>
