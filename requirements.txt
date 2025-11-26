@@ -1,0 +1,7 @@
+Flask
+textblob
+deep-translator
+matplotlib
+pandas
+openpyxl
+gunicorn
